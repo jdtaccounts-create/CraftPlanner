@@ -1,0 +1,18 @@
+{
+  "item_type_category_ids": [
+    4
+  ],
+  "item_type_ids": [
+    80
+  ],
+  "raw_types": [
+    "Bénédiction",
+    "Bonus de jeu de rôle",
+    "Malédiction",
+    "Mutation",
+    "Suiveur"
+  ],
+  "item_ids": [
+    15990
+  ]
+}

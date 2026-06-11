@@ -1,0 +1,54 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "CraftPlanner",
+  "version": "0.1.0",
+  "identifier": "fr.moufle.craftplanner",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:5175",
+    "beforeDevCommand": "npm run dev -- --host 127.0.0.1 --port 5175",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "CraftPlanner",
+        "width": 1280,
+        "height": 820,
+        "minWidth": 980,
+        "minHeight": 680,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "createUpdaterArtifacts": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "android": {
+      "debugApplicationIdSuffix": ".debug"
+    }
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDUzMzQyNDU0RTZFMUNENkIKUldScnplSG1WQ1EwVXpmSElFQ3k1QmJsUkhmOTJCZzlYVlhubW0yUmttU1o4MEZhemdMaHdUUFQK",
+      "endpoints": [
+        "https://github.com/jdtaccounts-create/CraftPlanner/releases/latest/download/latest.json"
+      ],
+      "windows": {
+        "installMode": "quiet"
+      }
+    }
+  }
+}
