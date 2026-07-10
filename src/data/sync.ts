@@ -152,6 +152,9 @@ function normalizeItem(raw: any, previous?: CatalogItem): CatalogItem | null {
     type_name: raw.type?.name?.fr || '',
     item_type_category_id: Number.isFinite(Number(raw.type?.categoryId)) ? Number(raw.type.categoryId) : null,
     item_type_in_encyclopedia: Boolean(raw.type?.inEncyclopedia),
+    criterions: raw.criterions || '',
+    quests_that_use: (raw.questsThatUse || []).map(Number),
+    quests_that_reward: (raw.questsThatReward || []).map(Number),
     image_url: remoteImage,
     image_path: isRemoteImage(previous?.image_path) ? previous!.image_path : '',
   }

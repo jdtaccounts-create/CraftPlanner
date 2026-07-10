@@ -12,6 +12,9 @@ export interface CatalogItem {
   type_name: string
   item_type_category_id: number | null
   item_type_in_encyclopedia?: boolean
+  criterions?: string
+  quests_that_use?: number[]
+  quests_that_reward?: number[]
   image_url?: string
   image_path: string
 }
