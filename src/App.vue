@@ -272,15 +272,43 @@ async function checkAppUpdate(): Promise<void> {
   }
 }
 
+async function acquireAppUpdateLock(): Promise<() => void> {
+  let heartbeatTimer: number | undefined
+  while (true) {
+    try {
+      const status = await acquireSharedSyncLock('CraftPlanner', 'app-update')
+      if (status.acquired) {
+        heartbeatTimer = window.setInterval(() => {
+          void heartbeatSharedSyncLock('CraftPlanner', 'app-update').catch(() => {})
+        }, 1000)
+        return () => {
+          if (heartbeatTimer) window.clearInterval(heartbeatTimer)
+          void releaseSharedSyncLock().catch(() => {})
+        }
+      }
+      const owner = status.lock?.app || 'Une autre app'
+      appUpdateProgress.value = `${owner} termine une opération commune. CraftPlanner attend son tour...`
+      await sleep(1500)
+    } catch {
+      // If the shared lock is unavailable, keep the updater usable.
+      return () => {}
+    }
+  }
+}
+
 async function installAppUpdate(): Promise<void> {
   if (!appUpdate.value || installingAppUpdate.value) return
   installingAppUpdate.value = true
-  appUpdateProgress.value = 'Téléchargement de la mise à jour...'
+  appUpdateProgress.value = 'Préparation de la mise à jour...'
   let downloaded = 0
   let total: number | undefined
+  let releaseAppUpdateLock: (() => void) | null = null
   try {
+    releaseAppUpdateLock = await acquireAppUpdateLock()
+    appUpdateProgress.value = 'Téléchargement de la mise à jour...'
     await appUpdate.value.downloadAndInstall((event: any) => {
       if (event.event === 'Started') {
+        downloaded = 0
         total = event.data?.contentLength
       } else if (event.event === 'Progress') {
         downloaded += event.data?.chunkLength || 0
@@ -291,11 +319,14 @@ async function installAppUpdate(): Promise<void> {
         appUpdateProgress.value = 'Installation terminée, redémarrage...'
       }
     })
+    releaseAppUpdateLock()
+    releaseAppUpdateLock = null
     const { relaunch } = await import('@tauri-apps/plugin-process')
     await relaunch()
   } catch (error) {
     appUpdateProgress.value = `Mise à jour impossible : ${String(error)}`
   } finally {
+    if (releaseAppUpdateLock) releaseAppUpdateLock()
     installingAppUpdate.value = false
   }
 }

@@ -42,4 +42,6 @@ L'application utilise `%LOCALAPPDATA%\DofusCompanionData` pour la base DofusDB c
 
 Pour tester une réinstallation silencieuse locale, utiliser l'installateur NSIS avec `/S /currentuser`. Le flag `/currentuser` force la restauration correcte des clés Windows de désinstallation pour l'installation utilisateur. L'auto-update Tauri transmet aussi ce flag via `plugins.updater.windows.installerArgs`.
 
+Les mises à jour automatiques utilisent le verrou commun `%LOCALAPPDATA%\DofusCompanionData\sync.lock` avec la phase `app-update`. Cela évite que plusieurs apps installent une mise à jour en même temps ou qu'une mise à jour se superpose à une synchronisation de données.
+
 Après une synchronisation réussie, l'application nettoie les images partagées devenues obsolètes.
