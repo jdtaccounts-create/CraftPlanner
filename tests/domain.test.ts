@@ -4,6 +4,7 @@ import { createCatalogSearchIndex, itemCategory, searchCatalog } from '../src/do
 import { buildCraftPlan } from '../src/domain/craft.ts'
 import { allocateOwned, setCraftLineAllocation, setCraftLineComplete, toggleOwned } from '../src/domain/possession.ts'
 import { addItemSet, addSelectedItem, parseItemLine, parseItemList, splitItemLines } from '../src/domain/selection.ts'
+import { groupMissingImages } from '../src/data/sync.ts'
 import type { CatalogData, CatalogItem } from '../src/domain/types.ts'
 
 function item(id: number, name: string, categoryId = 2): CatalogItem {
@@ -163,4 +164,23 @@ test('un item principal également sous-craft est alloué une seule fois, princi
 test('baisser un ingrédient ne défait pas un craft terminé', () => {
   const owned = { 1: 1, 3: 10 }
   assert.deepEqual(toggleOwned(owned, 3, 10), { 1: 1 })
+})
+
+test('regroupe les images identiques avant téléchargement', () => {
+  const sharedImage = 'https://api.dofusdb.fr/img/items/shared.png'
+  const imageData: CatalogData = {
+    items: {
+      1: { ...item(1, 'Image A'), image_url: sharedImage },
+      2: { ...item(2, 'Image B'), image_url: sharedImage },
+      3: { ...item(3, 'Déjà cache'), image_url: 'https://api.dofusdb.fr/img/items/cached.png' },
+      4: { ...item(4, 'Sans image distante'), image_path: 'cache/images/locale.png', image_url: '' },
+    },
+    recipes: {},
+    itemSets: {},
+    metadata: {},
+  }
+  const groups = groupMissingImages(imageData, new Set([3]))
+  assert.equal(groups.length, 1)
+  assert.equal(groups[0][0], sharedImage)
+  assert.deepEqual(groups[0][1].map((entry) => entry.id), [1, 2])
 })

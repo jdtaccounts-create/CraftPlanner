@@ -35,12 +35,44 @@ export interface RecipeExclusions {
   name_patterns: string[]
 }
 
+export interface HarvestableResource {
+  item_id: number
+  job: string
+  rarity: 'normal' | 'rare' | 'meat'
+  source_item_id?: number
+  source_monster_id?: number
+  source_monster_name?: string
+  order: number
+}
+
+export interface ResourceOrigin {
+  item_id: number
+  origins: Array<{
+    monster_id: number
+    monster_name: string
+    race_id: number | null
+    race_name: string
+    super_race_id: number | null
+    super_race_name: string
+    min_level: number | null
+    max_level: number | null
+    drop_rate: number
+    has_criterions: boolean
+  }>
+}
+
+export interface SortMetadata {
+  harvestables: Record<string, HarvestableResource>
+  resourceOrigins: Record<string, ResourceOrigin>
+}
+
 export interface CatalogData {
   items: Record<string, CatalogItem>
   recipes: Record<string, Recipe>
   itemSets: Record<string, ItemSet>
   metadata: Record<string, unknown>
   recipeExclusions?: RecipeExclusions
+  sortMetadata?: SortMetadata
 }
 
 export interface SelectedItem {

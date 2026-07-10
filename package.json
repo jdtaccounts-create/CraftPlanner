@@ -1,7 +1,7 @@
 {
   "name": "craftplanner",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -12,6 +12,7 @@
     "verify:images": "node scripts/verify-images.mjs",
     "deduplicate:images": "node scripts/deduplicate-images.mjs",
     "audit:parser": "tsx scripts/audit-parser.ts",
+    "build:resource-sort": "node scripts/build-resource-sort-data.mjs",
     "sync:item-sets": "node scripts/sync-item-sets.mjs",
     "release:latest": "node scripts/generate-latest-json.mjs",
     "tauri": "tauri"

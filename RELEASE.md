@@ -5,18 +5,39 @@
 - Dépôt local : `D:\GitHub\CraftPlanner`
 - Dépôt GitHub : `jdtaccounts-create/CraftPlanner`
 - Identifiant Tauri : `fr.moufle.craftplanner`
-- Clé privée locale : `C:\Users\Moufle\.tauri\updater-keys\craftplanner.key`
-- Clé publique locale : `C:\Users\Moufle\.tauri\updater-keys\craftplanner.key.pub`
+- Clé privée updater locale : `C:\Users\Moufle\.tauri\updater-keys\craftplanner.key`
+- Clé publique updater locale : `C:\Users\Moufle\.tauri\updater-keys\craftplanner.key.pub`
 
 Le contenu de la clé privée ne doit jamais être affiché ni commité.
 
-## Procédure
+## Checklist
 
-1. Mettre à jour la version dans `package.json`, `package-lock.json`, `src-tauri/Cargo.toml` et `src-tauri/tauri.conf.json`.
-2. Exécuter `npm test`, `npm run smoke`, `npm run verify:images` et `npm run build`.
-3. Charger la clé privée locale dans `TAURI_SIGNING_PRIVATE_KEY` uniquement pour la durée du build.
-4. Exécuter `npx tauri build --bundles nsis`.
-5. Exécuter `npm run release:latest`.
-6. Publier l'installateur NSIS, sa signature et `latest.json` dans la release GitHub correspondant à la version.
+1. Fermer toute instance lancée de l'application.
+2. Mettre à jour la version dans `package.json`, `package-lock.json`, `src-tauri/Cargo.toml` et `src-tauri/tauri.conf.json`.
+3. Vérifier que `src-tauri/tauri.conf.json` contient la clé publique updater.
+4. Exécuter les tests et le build frontend.
+5. Charger la clé privée dans `TAURI_SIGNING_PRIVATE_KEY` uniquement pour la durée du build Tauri.
+6. Générer les bundles Windows et les artefacts updater.
+7. Générer ou vérifier `latest.json`.
+8. Publier l'installateur NSIS, le MSI, les signatures et `latest.json` dans la release GitHub correspondant au tag.
 
-La clé publique seule est inscrite dans `src-tauri/tauri.conf.json`.
+## Commandes
+
+```powershell
+npm install
+npm test
+npm run smoke
+npm run build
+
+$env:TAURI_SIGNING_PRIVATE_KEY = Get-Content -Raw "C:\Users\Moufle\.tauri\updater-keys\craftplanner.key"
+npm run tauri -- build
+Remove-Item Env:\TAURI_SIGNING_PRIVATE_KEY
+
+npm run release:latest
+```
+
+## Données locales
+
+L'application utilise `%LOCALAPPDATA%\DofusCompanionData` pour la base DofusDB commune et les images utiles. Ce dossier n'est pas supprimé par l'installeur ou le désinstalleur afin d'éviter d'effacer des données encore utilisées par d'autres outils locaux.
+
+Après une synchronisation réussie, l'application nettoie les images partagées devenues obsolètes.

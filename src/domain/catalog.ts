@@ -60,6 +60,7 @@ export function searchCatalog(
   index: CatalogSearchIndex,
   query: string,
   limit = 60,
+  compareItems?: (a: CatalogItem, b: CatalogItem) => number,
 ): CatalogSearchResult[] {
   const normalized = normalizeText(query)
   if (!normalized) return []
@@ -74,7 +75,11 @@ export function searchCatalog(
     .filter((result) => Number.isFinite(result.score))
 
   return [...itemResults, ...setResults]
-    .sort((a, b) => a.score - b.score || ('item' in a ? a.item.name : a.itemSet.name).localeCompare('item' in b ? b.item.name : b.itemSet.name, 'fr'))
+    .sort((a, b) => {
+      if (a.score !== b.score) return a.score - b.score
+      if ('item' in a && 'item' in b && compareItems) return compareItems(a.item, b.item)
+      return ('item' in a ? a.item.name : a.itemSet.name).localeCompare('item' in b ? b.item.name : b.itemSet.name, 'fr')
+    })
     .slice(0, limit)
     .map(({ score: _score, ...result }) => result)
 }

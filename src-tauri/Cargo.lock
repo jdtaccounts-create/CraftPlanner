@@ -556,7 +556,7 @@ dependencies = [
 
 [[package]]
 name = "craftplanner"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "arboard",
  "log",
@@ -568,6 +568,7 @@ dependencies = [
  "tauri-plugin-log",
  "tauri-plugin-process",
  "tauri-plugin-updater",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]

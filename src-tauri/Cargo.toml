@@ -1,6 +1,6 @@
 [package]
 name = "craftplanner"
-version = "0.1.0"
+version = "0.1.1"
 description = "CraftPlanner"
 authors = ["Moufle"]
 license-file = "../NOTICE.md"
@@ -29,6 +29,7 @@ tauri = { version = "2.11.1", features = [] }
 tauri-plugin-log = "2"
 reqwest = "0.12"
 arboard = "3.6"
+windows-sys = { version = "0.61", features = ["Win32_Foundation", "Win32_System_Threading"] }
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-process = "2.3.1"

@@ -1,0 +1,1339 @@
+{
+  "289": {
+    "item_id": 289,
+    "job": "Paysan",
+    "rarity": "normal",
+    "order": 30000,
+    "source_item_id": 7941
+  },
+  "303": {
+    "item_id": 303,
+    "job": "Bucheron",
+    "rarity": "normal",
+    "order": 10009,
+    "source_item_id": 7950
+  },
+  "312": {
+    "item_id": 312,
+    "job": "Mineur",
+    "rarity": "normal",
+    "order": 20030,
+    "source_item_id": 7971
+  },
+  "313": {
+    "item_id": 313,
+    "job": "Mineur",
+    "rarity": "normal",
+    "order": 20039,
+    "source_item_id": 7980
+  },
+  "350": {
+    "item_id": 350,
+    "job": "Mineur",
+    "rarity": "normal",
+    "order": 20037,
+    "source_item_id": 7978
+  },
+  "380": {
+    "item_id": 380,
+    "job": "Alchimiste",
+    "rarity": "normal",
+    "order": 50026,
+    "source_item_id": 7967
+  },
+  "395": {
+    "item_id": 395,
+    "job": "Alchimiste",
+    "rarity": "normal",
+    "order": 50025,
+    "source_item_id": 7966
+  },
+  "400": {
+    "item_id": 400,
+    "job": "Paysan",
+    "rarity": "normal",
+    "order": 30001,
+    "source_item_id": 7942
+  },
+  "401": {
+    "item_id": 401,
+    "job": "Paysan",
+    "rarity": "normal",
+    "order": 30003,
+    "source_item_id": 7944
+  },
+  "405": {
+    "item_id": 405,
+    "job": "Paysan",
+    "rarity": "normal",
+    "order": 30007,
+    "source_item_id": 7948
+  },
+  "421": {
+    "item_id": 421,
+    "job": "Alchimiste",
+    "rarity": "normal",
+    "order": 50023,
+    "source_item_id": 7964
+  },
+  "423": {
+    "item_id": 423,
+    "job": "Paysan",
+    "rarity": "normal",
+    "order": 30004,
+    "source_item_id": 7945
+  },
+  "425": {
+    "item_id": 425,
+    "job": "Paysan",
+    "rarity": "normal",
+    "order": 30008,
+    "source_item_id": 7949
+  },
+  "428": {
+    "item_id": 428,
+    "job": "Alchimiste",
+    "rarity": "normal",
+    "order": 50024,
+    "source_item_id": 7965
+  },
+  "441": {
+    "item_id": 441,
+    "job": "Mineur",
+    "rarity": "normal",
+    "order": 20031,
+    "source_item_id": 7972
+  },
+  "442": {
+    "item_id": 442,
+    "job": "Mineur",
+    "rarity": "normal",
+    "order": 20032,
+    "source_item_id": 7973
+  },
+  "443": {
+    "item_id": 443,
+    "job": "Mineur",
+    "rarity": "normal",
+    "order": 20033,
+    "source_item_id": 7974
+  },
+  "444": {
+    "item_id": 444,
+    "job": "Mineur",
+    "rarity": "normal",
+    "order": 20035,
+    "source_item_id": 7976
+  },
+  "445": {
+    "item_id": 445,
+    "job": "Mineur",
+    "rarity": "normal",
+    "order": 20034,
+    "source_item_id": 7975
+  },
+  "446": {
+    "item_id": 446,
+    "job": "Mineur",
+    "rarity": "normal",
+    "order": 20038,
+    "source_item_id": 7979
+  },
+  "449": {
+    "item_id": 449,
+    "job": "Bucheron",
+    "rarity": "normal",
+    "order": 10019,
+    "source_item_id": 7960
+  },
+  "460": {
+    "item_id": 460,
+    "job": "Bucheron",
+    "rarity": "normal",
+    "order": 10012,
+    "source_item_id": 7953
+  },
+  "461": {
+    "item_id": 461,
+    "job": "Bucheron",
+    "rarity": "normal",
+    "order": 10016,
+    "source_item_id": 7957
+  },
+  "470": {
+    "item_id": 470,
+    "job": "Bucheron",
+    "rarity": "normal",
+    "order": 10021,
+    "source_item_id": 7962
+  },
+  "471": {
+    "item_id": 471,
+    "job": "Bucheron",
+    "rarity": "normal",
+    "order": 10015,
+    "source_item_id": 7956
+  },
+  "472": {
+    "item_id": 472,
+    "job": "Bucheron",
+    "rarity": "normal",
+    "order": 10056,
+    "source_item_id": 8081
+  },
+  "473": {
+    "item_id": 473,
+    "job": "Bucheron",
+    "rarity": "normal",
+    "order": 10010,
+    "source_item_id": 7951
+  },
+  "474": {
+    "item_id": 474,
+    "job": "Bucheron",
+    "rarity": "normal",
+    "order": 10018,
+    "source_item_id": 7959
+  },
+  "476": {
+    "item_id": 476,
+    "job": "Bucheron",
+    "rarity": "normal",
+    "order": 10011,
+    "source_item_id": 7952
+  },
+  "532": {
+    "item_id": 532,
+    "job": "Paysan",
+    "rarity": "normal",
+    "order": 30005,
+    "source_item_id": 7946
+  },
+  "533": {
+    "item_id": 533,
+    "job": "Paysan",
+    "rarity": "normal",
+    "order": 30002,
+    "source_item_id": 7943
+  },
+  "593": {
+    "item_id": 593,
+    "job": "Alchimiste",
+    "rarity": "normal",
+    "order": 50027,
+    "source_item_id": 7968
+  },
+  "594": {
+    "item_id": 594,
+    "job": "Alchimiste",
+    "rarity": "normal",
+    "order": 50028,
+    "source_item_id": 7969
+  },
+  "598": {
+    "item_id": 598,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40044,
+    "source_item_id": 7985
+  },
+  "600": {
+    "item_id": 600,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40050,
+    "source_item_id": 7991
+  },
+  "602": {
+    "item_id": 602,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40054,
+    "source_item_id": 7995
+  },
+  "603": {
+    "item_id": 603,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40043,
+    "source_item_id": 7984
+  },
+  "1750": {
+    "item_id": 1750,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40046,
+    "source_item_id": 7987
+  },
+  "1754": {
+    "item_id": 1754,
+    "job": "Pecheur",
+    "rarity": "rare",
+    "order": 40505,
+    "source_monster_id": 731,
+    "source_monster_name": "Dévoreur de Poisson Pané"
+  },
+  "1757": {
+    "item_id": 1757,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40045,
+    "source_item_id": 7986
+  },
+  "1759": {
+    "item_id": 1759,
+    "job": "Pecheur",
+    "rarity": "rare",
+    "order": 40504,
+    "source_monster_id": 730,
+    "source_monster_name": "Dévoreur de Crabe"
+  },
+  "1762": {
+    "item_id": 1762,
+    "job": "Pecheur",
+    "rarity": "rare",
+    "order": 40502,
+    "source_monster_id": 728,
+    "source_monster_name": "Dévoreur de Poisson Chaton"
+  },
+  "1779": {
+    "item_id": 1779,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40051,
+    "source_item_id": 7992
+  },
+  "1782": {
+    "item_id": 1782,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40041,
+    "source_item_id": 7982
+  },
+  "1784": {
+    "item_id": 1784,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40052,
+    "source_item_id": 7993
+  },
+  "1786": {
+    "item_id": 1786,
+    "job": "Pecheur",
+    "rarity": "rare",
+    "order": 40503,
+    "source_monster_id": 729,
+    "source_monster_name": "Dévoreur de Greuvette"
+  },
+  "1788": {
+    "item_id": 1788,
+    "job": "Pecheur",
+    "rarity": "rare",
+    "order": 40511,
+    "source_monster_id": 737,
+    "source_monster_name": "Dévoreur de Raie"
+  },
+  "1790": {
+    "item_id": 1790,
+    "job": "Pecheur",
+    "rarity": "rare",
+    "order": 40500,
+    "source_monster_id": 726,
+    "source_monster_name": "Dévoreur de Goujons"
+  },
+  "1792": {
+    "item_id": 1792,
+    "job": "Pecheur",
+    "rarity": "rare",
+    "order": 40510,
+    "source_monster_id": 736,
+    "source_monster_name": "Dévoreur de Bar"
+  },
+  "1794": {
+    "item_id": 1794,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40048,
+    "source_item_id": 7989
+  },
+  "1796": {
+    "item_id": 1796,
+    "job": "Pecheur",
+    "rarity": "rare",
+    "order": 40507,
+    "source_monster_id": 733,
+    "source_monster_name": "Dévoreur de Carpe"
+  },
+  "1799": {
+    "item_id": 1799,
+    "job": "Pecheur",
+    "rarity": "rare",
+    "order": 40509,
+    "source_monster_id": 735,
+    "source_monster_name": "Dévoreur de Kralamoure"
+  },
+  "1801": {
+    "item_id": 1801,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40053,
+    "source_item_id": 7994
+  },
+  "1803": {
+    "item_id": 1803,
+    "job": "Pecheur",
+    "rarity": "rare",
+    "order": 40512,
+    "source_monster_id": 738,
+    "source_monster_name": "Dévoreur de Perche"
+  },
+  "1805": {
+    "item_id": 1805,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40049,
+    "source_item_id": 7990
+  },
+  "1807": {
+    "item_id": 1807,
+    "job": "Pecheur",
+    "rarity": "rare",
+    "order": 40508,
+    "source_monster_id": 734,
+    "source_monster_name": "Dévoreur de Sardine"
+  },
+  "1844": {
+    "item_id": 1844,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40042,
+    "source_item_id": 7983
+  },
+  "1846": {
+    "item_id": 1846,
+    "job": "Pecheur",
+    "rarity": "rare",
+    "order": 40501,
+    "source_monster_id": 727,
+    "source_monster_name": "Dévoreur de Truite"
+  },
+  "1847": {
+    "item_id": 1847,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40047,
+    "source_item_id": 7988
+  },
+  "1849": {
+    "item_id": 1849,
+    "job": "Pecheur",
+    "rarity": "rare",
+    "order": 40506,
+    "source_monster_id": 732,
+    "source_monster_name": "Dévoreur de Brochet"
+  },
+  "1853": {
+    "item_id": 1853,
+    "job": "Pecheur",
+    "rarity": "rare",
+    "order": 40513,
+    "source_monster_id": 739,
+    "source_monster_name": "Dévoreur de Requin"
+  },
+  "2018": {
+    "item_id": 2018,
+    "job": "Paysan",
+    "rarity": "rare",
+    "order": 30500,
+    "source_monster_id": 684,
+    "source_monster_name": "Épouvantail de Blé"
+  },
+  "2021": {
+    "item_id": 2021,
+    "job": "Paysan",
+    "rarity": "rare",
+    "order": 30503,
+    "source_monster_id": 687,
+    "source_monster_name": "Épouvantail de Houblon"
+  },
+  "2026": {
+    "item_id": 2026,
+    "job": "Paysan",
+    "rarity": "rare",
+    "order": 30504,
+    "source_monster_id": 688,
+    "source_monster_name": "Épouvantail de Lin"
+  },
+  "2029": {
+    "item_id": 2029,
+    "job": "Paysan",
+    "rarity": "rare",
+    "order": 30505,
+    "source_monster_id": 689,
+    "source_monster_name": "Épouvantail de Seigle"
+  },
+  "2032": {
+    "item_id": 2032,
+    "job": "Paysan",
+    "rarity": "rare",
+    "order": 30501,
+    "source_monster_id": 685,
+    "source_monster_name": "Épouvantail d'Orge"
+  },
+  "2035": {
+    "item_id": 2035,
+    "job": "Paysan",
+    "rarity": "rare",
+    "order": 30508,
+    "source_monster_id": 692,
+    "source_monster_name": "Épouvantail de Chanvre"
+  },
+  "2036": {
+    "item_id": 2036,
+    "job": "Paysan",
+    "rarity": "rare",
+    "order": 30502,
+    "source_monster_id": 686,
+    "source_monster_name": "Épouvantail d'Avoine"
+  },
+  "2357": {
+    "item_id": 2357,
+    "job": "Bucheron",
+    "rarity": "normal",
+    "order": 10014,
+    "source_item_id": 7955
+  },
+  "2358": {
+    "item_id": 2358,
+    "job": "Bucheron",
+    "rarity": "normal",
+    "order": 10013,
+    "source_item_id": 7954
+  },
+  "7013": {
+    "item_id": 7013,
+    "job": "Bucheron",
+    "rarity": "normal",
+    "order": 10017,
+    "source_item_id": 7958
+  },
+  "7014": {
+    "item_id": 7014,
+    "job": "Bucheron",
+    "rarity": "normal",
+    "order": 10022,
+    "source_item_id": 7963
+  },
+  "7016": {
+    "item_id": 7016,
+    "job": "Bucheron",
+    "rarity": "normal",
+    "order": 10020,
+    "source_item_id": 7961
+  },
+  "7018": {
+    "item_id": 7018,
+    "job": "Paysan",
+    "rarity": "normal",
+    "order": 30006,
+    "source_item_id": 7947
+  },
+  "7032": {
+    "item_id": 7032,
+    "job": "Mineur",
+    "rarity": "normal",
+    "order": 20036,
+    "source_item_id": 7977
+  },
+  "7033": {
+    "item_id": 7033,
+    "job": "Mineur",
+    "rarity": "normal",
+    "order": 20040,
+    "source_item_id": 7981
+  },
+  "7059": {
+    "item_id": 7059,
+    "job": "Alchimiste",
+    "rarity": "normal",
+    "order": 50029,
+    "source_item_id": 7970
+  },
+  "7925": {
+    "item_id": 7925,
+    "job": "Bucheron",
+    "rarity": "normal",
+    "order": 10055,
+    "source_item_id": 7996
+  },
+  "11102": {
+    "item_id": 11102,
+    "job": "Alchimiste",
+    "rarity": "normal",
+    "order": 50057,
+    "source_item_id": 11103
+  },
+  "11106": {
+    "item_id": 11106,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40058,
+    "source_item_id": 11111
+  },
+  "11107": {
+    "item_id": 11107,
+    "job": "Bucheron",
+    "rarity": "normal",
+    "order": 10059,
+    "source_item_id": 11112
+  },
+  "11109": {
+    "item_id": 11109,
+    "job": "Paysan",
+    "rarity": "normal",
+    "order": 30060,
+    "source_item_id": 11113
+  },
+  "11110": {
+    "item_id": 11110,
+    "job": "Mineur",
+    "rarity": "normal",
+    "order": 20061,
+    "source_item_id": 11114
+  },
+  "11499": {
+    "item_id": 11499,
+    "job": "Paysan",
+    "rarity": "rare",
+    "order": 30509,
+    "source_monster_id": 2843,
+    "source_monster_name": "Épouvantail de Frostiz"
+  },
+  "11500": {
+    "item_id": 11500,
+    "job": "Pecheur",
+    "rarity": "rare",
+    "order": 40514,
+    "source_monster_id": 2841,
+    "source_monster_name": "Dévoreur de Poisskaille"
+  },
+  "11501": {
+    "item_id": 11501,
+    "job": "Alchimiste",
+    "rarity": "rare",
+    "order": 50507,
+    "source_monster_id": 2839,
+    "source_monster_name": "Bulbeneige"
+  },
+  "16378": {
+    "item_id": 16378,
+    "job": "Alchimiste",
+    "rarity": "rare",
+    "order": 50500,
+    "source_monster_id": 704,
+    "source_monster_name": "Bulbortie"
+  },
+  "16379": {
+    "item_id": 16379,
+    "job": "Alchimiste",
+    "rarity": "rare",
+    "order": 50501,
+    "source_monster_id": 705,
+    "source_monster_name": "Bulbisauge"
+  },
+  "16380": {
+    "item_id": 16380,
+    "job": "Alchimiste",
+    "rarity": "rare",
+    "order": 50502,
+    "source_monster_id": 706,
+    "source_monster_name": "Bulbitrèfle"
+  },
+  "16381": {
+    "item_id": 16381,
+    "job": "Alchimiste",
+    "rarity": "rare",
+    "order": 50503,
+    "source_monster_id": 707,
+    "source_monster_name": "Bulbimenthe"
+  },
+  "16382": {
+    "item_id": 16382,
+    "job": "Alchimiste",
+    "rarity": "rare",
+    "order": 50504,
+    "source_monster_id": 708,
+    "source_monster_name": "Bulborchidée"
+  },
+  "16383": {
+    "item_id": 16383,
+    "job": "Alchimiste",
+    "rarity": "rare",
+    "order": 50505,
+    "source_monster_id": 709,
+    "source_monster_name": "Bulbedelweiss"
+  },
+  "16384": {
+    "item_id": 16384,
+    "job": "Alchimiste",
+    "rarity": "rare",
+    "order": 50506,
+    "source_monster_id": 710,
+    "source_monster_name": "Bulpandouille"
+  },
+  "16385": {
+    "item_id": 16385,
+    "job": "Alchimiste",
+    "rarity": "normal",
+    "order": 50062,
+    "source_item_id": 16528
+  },
+  "16386": {
+    "item_id": 16386,
+    "job": "Alchimiste",
+    "rarity": "rare",
+    "order": 50508,
+    "source_monster_id": 4115,
+    "source_monster_name": "Bulbiginseng"
+  },
+  "16387": {
+    "item_id": 16387,
+    "job": "Alchimiste",
+    "rarity": "normal",
+    "order": 50063,
+    "source_item_id": 16529
+  },
+  "16388": {
+    "item_id": 16388,
+    "job": "Alchimiste",
+    "rarity": "rare",
+    "order": 50509,
+    "source_monster_id": 4116,
+    "source_monster_name": "Bulbelladone"
+  },
+  "16389": {
+    "item_id": 16389,
+    "job": "Alchimiste",
+    "rarity": "normal",
+    "order": 50064,
+    "source_item_id": 16530
+  },
+  "16390": {
+    "item_id": 16390,
+    "job": "Alchimiste",
+    "rarity": "rare",
+    "order": 50510,
+    "source_monster_id": 4117,
+    "source_monster_name": "Bulbimandragore"
+  },
+  "16452": {
+    "item_id": 16452,
+    "job": "Paysan",
+    "rarity": "rare",
+    "order": 30506,
+    "source_monster_id": 690,
+    "source_monster_name": "Épouvantail de Riz"
+  },
+  "16453": {
+    "item_id": 16453,
+    "job": "Paysan",
+    "rarity": "rare",
+    "order": 30507,
+    "source_monster_id": 691,
+    "source_monster_name": "Épouvantail de Malt"
+  },
+  "16454": {
+    "item_id": 16454,
+    "job": "Paysan",
+    "rarity": "normal",
+    "order": 30066,
+    "source_item_id": 16532
+  },
+  "16455": {
+    "item_id": 16455,
+    "job": "Paysan",
+    "rarity": "rare",
+    "order": 30510,
+    "source_monster_id": 4119,
+    "source_monster_name": "Épouvantail de Maïs"
+  },
+  "16456": {
+    "item_id": 16456,
+    "job": "Paysan",
+    "rarity": "normal",
+    "order": 30067,
+    "source_item_id": 16533
+  },
+  "16457": {
+    "item_id": 16457,
+    "job": "Paysan",
+    "rarity": "rare",
+    "order": 30511,
+    "source_monster_id": 4120,
+    "source_monster_name": "Épouvantail de Millet"
+  },
+  "16461": {
+    "item_id": 16461,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40068,
+    "source_item_id": 16534
+  },
+  "16462": {
+    "item_id": 16462,
+    "job": "Pecheur",
+    "rarity": "rare",
+    "order": 40515,
+    "source_monster_id": 4183,
+    "source_monster_name": "Dévoreur d'Anguille"
+  },
+  "16463": {
+    "item_id": 16463,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40069,
+    "source_item_id": 16535
+  },
+  "16464": {
+    "item_id": 16464,
+    "job": "Pecheur",
+    "rarity": "rare",
+    "order": 40516,
+    "source_monster_id": 4184,
+    "source_monster_name": "Dévoreur de Dorade"
+  },
+  "16465": {
+    "item_id": 16465,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40070,
+    "source_item_id": 16536
+  },
+  "16466": {
+    "item_id": 16466,
+    "job": "Pecheur",
+    "rarity": "rare",
+    "order": 40517,
+    "source_monster_id": 4185,
+    "source_monster_name": "Dévoreur de Lotte"
+  },
+  "16467": {
+    "item_id": 16467,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40071,
+    "source_item_id": 16537
+  },
+  "16468": {
+    "item_id": 16468,
+    "job": "Pecheur",
+    "rarity": "rare",
+    "order": 40518,
+    "source_monster_id": 4186,
+    "source_monster_name": "Dévoreur de Morue"
+  },
+  "16469": {
+    "item_id": 16469,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40072,
+    "source_item_id": 16538
+  },
+  "16470": {
+    "item_id": 16470,
+    "job": "Pecheur",
+    "rarity": "rare",
+    "order": 40519,
+    "source_monster_id": 4187,
+    "source_monster_name": "Dévoreur de Tanche"
+  },
+  "16471": {
+    "item_id": 16471,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40073,
+    "source_item_id": 16539
+  },
+  "16472": {
+    "item_id": 16472,
+    "job": "Pecheur",
+    "rarity": "rare",
+    "order": 40520,
+    "source_monster_id": 4188,
+    "source_monster_name": "Dévoreur d'Espadon"
+  },
+  "16488": {
+    "item_id": 16488,
+    "job": "Bucheron",
+    "rarity": "normal",
+    "order": 10065,
+    "source_item_id": 16531
+  },
+  "16663": {
+    "item_id": 16663,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60029
+  },
+  "16909": {
+    "item_id": 16909,
+    "job": "Bucheron",
+    "rarity": "rare",
+    "order": 10500,
+    "source_monster_id": 711,
+    "source_monster_name": "Frêne Ensorcelé"
+  },
+  "16910": {
+    "item_id": 16910,
+    "job": "Bucheron",
+    "rarity": "rare",
+    "order": 10501,
+    "source_monster_id": 712,
+    "source_monster_name": "Châtaignier Ensorcelé"
+  },
+  "16911": {
+    "item_id": 16911,
+    "job": "Bucheron",
+    "rarity": "rare",
+    "order": 10502,
+    "source_monster_id": 713,
+    "source_monster_name": "Noyer Ensorcelé"
+  },
+  "16912": {
+    "item_id": 16912,
+    "job": "Bucheron",
+    "rarity": "rare",
+    "order": 10503,
+    "source_monster_id": 714,
+    "source_monster_name": "Chêne Ensorcelé"
+  },
+  "16913": {
+    "item_id": 16913,
+    "job": "Bucheron",
+    "rarity": "rare",
+    "order": 10504,
+    "source_monster_id": 715,
+    "source_monster_name": "Bombu Ensorcelé"
+  },
+  "16914": {
+    "item_id": 16914,
+    "job": "Bucheron",
+    "rarity": "rare",
+    "order": 10506,
+    "source_monster_id": 717,
+    "source_monster_name": "Erable Ensorcelé"
+  },
+  "16915": {
+    "item_id": 16915,
+    "job": "Bucheron",
+    "rarity": "rare",
+    "order": 10505,
+    "source_monster_id": 716,
+    "source_monster_name": "Oliviolet Ensorcelé"
+  },
+  "16916": {
+    "item_id": 16916,
+    "job": "Bucheron",
+    "rarity": "rare",
+    "order": 10507,
+    "source_monster_id": 718,
+    "source_monster_name": "If Ensorcelé"
+  },
+  "16917": {
+    "item_id": 16917,
+    "job": "Bucheron",
+    "rarity": "rare",
+    "order": 10508,
+    "source_monster_id": 719,
+    "source_monster_name": "Bambou Ensorcelé"
+  },
+  "16918": {
+    "item_id": 16918,
+    "job": "Bucheron",
+    "rarity": "rare",
+    "order": 10510,
+    "source_monster_id": 721,
+    "source_monster_name": "Merisier Ensorcelé"
+  },
+  "16919": {
+    "item_id": 16919,
+    "job": "Bucheron",
+    "rarity": "rare",
+    "order": 10517,
+    "source_monster_id": 4118,
+    "source_monster_name": "Noisetier Ensorcelé"
+  },
+  "16920": {
+    "item_id": 16920,
+    "job": "Bucheron",
+    "rarity": "rare",
+    "order": 10511,
+    "source_monster_id": 722,
+    "source_monster_name": "Ebène Ensorcelé"
+  },
+  "16921": {
+    "item_id": 16921,
+    "job": "Bucheron",
+    "rarity": "rare",
+    "order": 10509,
+    "source_monster_id": 720,
+    "source_monster_name": "Kaliptus Ensorcelé"
+  },
+  "16922": {
+    "item_id": 16922,
+    "job": "Bucheron",
+    "rarity": "rare",
+    "order": 10515,
+    "source_monster_id": 782,
+    "source_monster_name": "Charme Ensorcelé"
+  },
+  "16923": {
+    "item_id": 16923,
+    "job": "Bucheron",
+    "rarity": "rare",
+    "order": 10512,
+    "source_monster_id": 723,
+    "source_monster_name": "Bambou Sombre Ensorcelé"
+  },
+  "16924": {
+    "item_id": 16924,
+    "job": "Bucheron",
+    "rarity": "rare",
+    "order": 10513,
+    "source_monster_id": 724,
+    "source_monster_name": "Orme Ensorcelé"
+  },
+  "16925": {
+    "item_id": 16925,
+    "job": "Bucheron",
+    "rarity": "rare",
+    "order": 10514,
+    "source_monster_id": 725,
+    "source_monster_name": "Bambou Sacré Ensorcelé"
+  },
+  "16926": {
+    "item_id": 16926,
+    "job": "Bucheron",
+    "rarity": "rare",
+    "order": 10516,
+    "source_monster_id": 2842,
+    "source_monster_name": "Tremble Ensorcelé"
+  },
+  "17123": {
+    "item_id": 17123,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60028
+  },
+  "17124": {
+    "item_id": 17124,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60023
+  },
+  "17125": {
+    "item_id": 17125,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60003
+  },
+  "17126": {
+    "item_id": 17126,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60025
+  },
+  "17127": {
+    "item_id": 17127,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60005
+  },
+  "17128": {
+    "item_id": 17128,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60033
+  },
+  "17129": {
+    "item_id": 17129,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60012
+  },
+  "17130": {
+    "item_id": 17130,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60040
+  },
+  "17131": {
+    "item_id": 17131,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60019
+  },
+  "17132": {
+    "item_id": 17132,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60030
+  },
+  "17133": {
+    "item_id": 17133,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60009
+  },
+  "17134": {
+    "item_id": 17134,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60020
+  },
+  "17135": {
+    "item_id": 17135,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60000
+  },
+  "17136": {
+    "item_id": 17136,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60038
+  },
+  "17137": {
+    "item_id": 17137,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60017
+  },
+  "17138": {
+    "item_id": 17138,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60036
+  },
+  "17139": {
+    "item_id": 17139,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60015
+  },
+  "17140": {
+    "item_id": 17140,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60022
+  },
+  "17141": {
+    "item_id": 17141,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60002
+  },
+  "17142": {
+    "item_id": 17142,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60039
+  },
+  "17143": {
+    "item_id": 17143,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60018
+  },
+  "17144": {
+    "item_id": 17144,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60037
+  },
+  "17145": {
+    "item_id": 17145,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60016
+  },
+  "17146": {
+    "item_id": 17146,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60035
+  },
+  "17147": {
+    "item_id": 17147,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60014
+  },
+  "17148": {
+    "item_id": 17148,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60031
+  },
+  "17149": {
+    "item_id": 17149,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60010
+  },
+  "17150": {
+    "item_id": 17150,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60021
+  },
+  "17151": {
+    "item_id": 17151,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60001
+  },
+  "17152": {
+    "item_id": 17152,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60024
+  },
+  "17153": {
+    "item_id": 17153,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60004
+  },
+  "17154": {
+    "item_id": 17154,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60032
+  },
+  "17155": {
+    "item_id": 17155,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60011
+  },
+  "17156": {
+    "item_id": 17156,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60026
+  },
+  "17157": {
+    "item_id": 17157,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60006
+  },
+  "17158": {
+    "item_id": 17158,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60034
+  },
+  "17159": {
+    "item_id": 17159,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60013
+  },
+  "17160": {
+    "item_id": 17160,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60027
+  },
+  "17161": {
+    "item_id": 17161,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60007
+  },
+  "17421": {
+    "item_id": 17421,
+    "job": "Chasseur",
+    "rarity": "meat",
+    "order": 60008
+  },
+  "17991": {
+    "item_id": 17991,
+    "job": "Bucheron",
+    "rarity": "normal",
+    "order": 10074,
+    "source_item_id": 18058
+  },
+  "17992": {
+    "item_id": 17992,
+    "job": "Alchimiste",
+    "rarity": "normal",
+    "order": 50075,
+    "source_item_id": 18059
+  },
+  "17993": {
+    "item_id": 17993,
+    "job": "Paysan",
+    "rarity": "normal",
+    "order": 30076,
+    "source_item_id": 18060
+  },
+  "17994": {
+    "item_id": 17994,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40077,
+    "source_item_id": 18061
+  },
+  "17995": {
+    "item_id": 17995,
+    "job": "Mineur",
+    "rarity": "normal",
+    "order": 20078,
+    "source_item_id": 18062
+  },
+  "23824": {
+    "item_id": 23824,
+    "job": "Alchimiste",
+    "rarity": "normal",
+    "order": 50082,
+    "source_item_id": 24041
+  },
+  "23825": {
+    "item_id": 23825,
+    "job": "Pecheur",
+    "rarity": "normal",
+    "order": 40079,
+    "source_item_id": 24038
+  },
+  "23902": {
+    "item_id": 23902,
+    "job": "Mineur",
+    "rarity": "normal",
+    "order": 20081,
+    "source_item_id": 24040
+  },
+  "23903": {
+    "item_id": 23903,
+    "job": "Mineur",
+    "rarity": "normal",
+    "order": 20080,
+    "source_item_id": 24039
+  },
+  "27375": {
+    "item_id": 27375,
+    "job": "Bucheron",
+    "rarity": "normal",
+    "order": 10084,
+    "source_item_id": 27721
+  },
+  "27621": {
+    "item_id": 27621,
+    "job": "Mineur",
+    "rarity": "normal",
+    "order": 20083,
+    "source_item_id": 27715
+  }
+}
