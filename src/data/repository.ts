@@ -1,4 +1,4 @@
-import type { CatalogData, CatalogItem, ItemSet, Recipe, ResourceOrigin, HarvestableResource } from '../domain/types'
+import type { CatalogData, ResourceOrigin, HarvestableResource } from '../domain/types'
 import { loadStoredCatalog, saveStoredCatalog } from './storage'
 import { applyCuratedOverrides } from './curated'
 
@@ -28,19 +28,11 @@ export async function loadCatalogData(): Promise<CatalogData> {
     if (repaired.changed) await saveStoredCatalog(repaired.data).catch(() => {})
     return applyCuratedOverrides({ ...repaired.data, ...sortMetadata })
   }
-  const [items, recipes, itemSets, metadata] = await Promise.all([
-    fetch('/data/generated/items.json').then((response) => response.json()) as Promise<Record<string, CatalogItem>>,
-    fetch('/data/generated/recipes.json').then((response) => response.json()) as Promise<Record<string, Recipe>>,
-    fetch('/data/generated/item_sets.json').then((response) => response.json()).catch(() => ({})) as Promise<Record<string, ItemSet>>,
-    fetch('/data/generated/metadata.json').then((response) => response.json()) as Promise<Record<string, unknown>>,
-  ])
-  const bundled = stripBundledImagePaths({
-    items,
-    recipes,
-    itemSets,
-    metadata: { ...metadata, shared_sync_state: 'bootstrap' },
+  return applyCuratedOverrides({
+    items: {},
+    recipes: {},
+    itemSets: {},
+    metadata: { shared_sync_state: 'bootstrap' },
     ...sortMetadata,
-  }).data
-  await saveStoredCatalog(bundled).catch(() => {})
-  return applyCuratedOverrides(bundled)
+  })
 }
