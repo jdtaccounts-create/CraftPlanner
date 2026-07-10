@@ -40,4 +40,6 @@ npm run release:latest
 
 L'application utilise `%LOCALAPPDATA%\DofusCompanionData` pour la base DofusDB commune et les images utiles. Ce dossier n'est pas supprimé par l'installeur ou le désinstalleur afin d'éviter d'effacer des données encore utilisées par d'autres outils locaux.
 
+Pour tester une réinstallation silencieuse locale, utiliser l'installateur NSIS avec `/S /currentuser`. Le flag `/currentuser` force la restauration correcte des clés Windows de désinstallation pour l'installation utilisateur. L'auto-update Tauri transmet aussi ce flag via `plugins.updater.windows.installerArgs`.
+
 Après une synchronisation réussie, l'application nettoie les images partagées devenues obsolètes.
