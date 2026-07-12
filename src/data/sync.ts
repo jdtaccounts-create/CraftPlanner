@@ -1,6 +1,6 @@
 import { compactText, normalizeText } from '../domain/catalog'
 import type { CatalogData, CatalogItem, Characteristic, ItemEffect, ItemSet, Recipe } from '../domain/types'
-import { loadCachedImageIds, loadCharacteristicIconFiles, loadFailedCachedImages, pruneCachedImages, saveCachedImage, saveCharacteristicIcon, saveFailedCachedImages, saveSharedJson, saveStoredCatalog, type FailedCachedImage } from './storage'
+import { loadCachedImageIds, loadCharacteristicIconFiles, loadFailedCachedImages, loadSharedJson, pruneCachedImages, saveCachedImage, saveCharacteristicIcon, saveFailedCachedImages, saveSharedJson, saveStoredCatalog, type FailedCachedImage } from './storage'
 import { applyCuratedOverrides } from './curated'
 
 const API_URL = 'https://api.dofusdb.fr'
@@ -413,7 +413,11 @@ async function requiredCharacteristicIconFiles(): Promise<string[]> {
 async function missingCharacteristicIconFiles(): Promise<string[]> {
   const required = await requiredCharacteristicIconFiles()
   const existing = new Set(await loadCharacteristicIconFiles())
-  return required.filter((file) => !existing.has(file))
+  const manifest = await loadSharedJson<Array<{ file?: string; missing?: boolean }>>('characteristic-icons').catch(() => null)
+  const knownMissing = new Set((manifest || [])
+    .filter((row) => row.missing && row.file)
+    .map((row) => row.file!))
+  return required.filter((file) => !existing.has(file) && !knownMissing.has(file))
 }
 
 async function syncCharacteristicSupport(rawCharacteristics: any[], progress?: SyncProgress): Promise<Characteristic[]> {

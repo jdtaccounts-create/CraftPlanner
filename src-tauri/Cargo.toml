@@ -1,6 +1,6 @@
 [package]
 name = "craftplanner"
-version = "0.1.9"
+version = "0.1.10"
 description = "CraftPlanner"
 authors = ["Moufle"]
 license-file = "../NOTICE.md"
