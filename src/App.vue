@@ -98,7 +98,7 @@ const showSearchResults = computed(() => searchOpen.value && query.value && resu
 const plan = computed(() => data.value ? buildCraftPlan(data.value, selected.value) : null)
 const allCraftLines = computed(() => plan.value ? craftPlanLines(plan.value) : [])
 const craftAllocations = computed(() => allocateOwned(allCraftLines.value, owned.value))
-const syncLocked = computed(() => loading.value || syncVisible.value)
+const syncLocked = computed(() => syncVisible.value)
 const syncRows = computed(() => {
   const rows = syncTaskOrder.map((key) => syncTasks.value[key])
   return syncVisible.value ? rows : rows.filter((task) => task.total > 0 || task.done > 0)
@@ -905,7 +905,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="app-shell" @click="searchOpen = false">
-    <main class="workspace" :class="{ 'craft-mode': craftOpen, 'sync-locked': syncLocked }">
+    <main class="workspace" :class="{ 'craft-mode': craftOpen }">
       <aside class="selection-sidebar glass-surface">
         <section class="selection-top">
           <section class="search-block" @click.stop>

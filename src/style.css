@@ -154,13 +154,6 @@ button {
   gap: 12px;
 }
 
-.workspace.sync-locked {
-  pointer-events: none;
-  user-select: none;
-  filter: blur(2px) saturate(.9);
-  transform: scale(.998);
-}
-
 .selection-sidebar,
 .item-column,
 .choice-panel,
