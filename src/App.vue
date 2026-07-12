@@ -8,7 +8,7 @@ import { compareCatalogItems, compareCraftLines as compareResourceCraftLines } f
 import { addItemSet, addSelectedItem, parseItemList, setSelectedQuantity, type ParsedChoice, type ParsedChoiceOption } from './domain/selection'
 import { ITEM_CATEGORIES, type CatalogData, type CraftLine, type ItemCategory, type SelectedItem } from './domain/types'
 import { loadCatalogData } from './data/repository'
-import { ESTIMATED_IMAGE_BYTES, type SyncEndpoint, type SyncProgressEvent } from './data/sync'
+import { checkCatalogStatus, ESTIMATED_IMAGE_BYTES, type SyncEndpoint, type SyncProgressEvent } from './data/sync'
 import {
   acquireSharedSyncLock,
   heartbeatSharedSyncLock,
@@ -632,6 +632,14 @@ async function synchronizeCatalogIfNeeded(): Promise<void> {
   if (!data.value) return
   const force = isForceFullSyncRequested()
   try {
+    if (!force) {
+      const info = await checkCatalogStatus(data.value)
+      if (!info.needsSync) {
+        status.value = catalogLoadedStatus()
+        return
+      }
+      status.value = `Mise à jour disponible : ${info.labels.join(', ')}`
+    }
     resetSyncProgress(force ? 'Synchronisation complète forcée...' : 'Synchronisation de la base Dofus commune...')
     await waitForSyncDialogPaint()
     await runSharedSyncEngine('CraftPlanner', force)
@@ -1042,7 +1050,7 @@ onBeforeUnmount(() => {
       </section>
     </div>
 
-    <div v-if="showAppUpdatePrompt && appUpdate" class="sync-dialog">
+    <div v-if="showAppUpdatePrompt && appUpdate && !syncVisible" class="sync-dialog">
       <section class="sync-card glass-surface">
         <h2>Mise à jour nécessaire</h2>
         <p>
