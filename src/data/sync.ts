@@ -1,6 +1,6 @@
 import { compactText, normalizeText } from '../domain/catalog'
-import type { CatalogData, CatalogItem, ItemSet, Recipe } from '../domain/types'
-import { loadCachedImageIds, loadFailedCachedImages, pruneCachedImages, saveCachedImage, saveFailedCachedImages, saveStoredCatalog, type FailedCachedImage } from './storage'
+import type { CatalogData, CatalogItem, Characteristic, ItemEffect, ItemSet, Recipe } from '../domain/types'
+import { loadCachedImageIds, loadCharacteristicIconFiles, loadFailedCachedImages, pruneCachedImages, saveCachedImage, saveCharacteristicIcon, saveFailedCachedImages, saveSharedJson, saveStoredCatalog, type FailedCachedImage } from './storage'
 import { applyCuratedOverrides } from './curated'
 
 const API_URL = 'https://api.dofusdb.fr'
@@ -12,11 +12,12 @@ const TRANSIENT_FAILED_IMAGE_RETRY_MS = 15 * 60 * 1000
 const ESTIMATED_JSON_COMPRESSION_RATIO = 0.16
 export const ESTIMATED_IMAGE_BYTES = 40 * 1024
 
-export type SyncEndpoint = 'items' | 'recipes' | 'itemSets'
+export type SyncEndpoint = 'items' | 'recipes' | 'itemSets' | 'characteristics'
 
 export type SyncProgressEvent =
   | { kind: 'endpoint'; endpoint: SyncEndpoint; done: number; total: number; bytesDone: number }
   | { kind: 'images'; done: number; total: number; bytesDone: number; bytesTotal?: number }
+  | { kind: 'statIcons'; done: number; total: number; bytesDone: number; bytesTotal?: number }
   | { kind: 'message'; message: string }
 
 export type SyncProgress = (event: SyncProgressEvent) => void
@@ -27,11 +28,55 @@ export interface CatalogStatus {
   totals: Record<SyncEndpoint, number>
   latestUpdatedAt: Record<SyncEndpoint, string>
   missingImageGroups: number
+  missingCharacteristicIcons: number
 }
 
 type EndpointInfo = {
   total: number
   latestUpdatedAt: string
+}
+
+const CHARACTERISTIC_ICON_BASE_URL = 'https://dofusdb.fr/icons/characteristics'
+const ESTIMATED_CHARACTERISTIC_ICON_BYTES = 6 * 1024
+const CHARACTERISTIC_ICON_ALIASES: Record<string, string> = {
+  tx_lifePoints: 'tx_health.png',
+  tx_strengthRes: 'tx_res_strength.png',
+  tx_intelligenceRes: 'tx_res_intelligence.png',
+  tx_chanceRes: 'tx_res_chance.png',
+  tx_agilityRes: 'tx_res_agility.png',
+  tx_neutralRes: 'tx_res_neutre.png',
+}
+
+function sharedSyncManifest(): Record<string, unknown> {
+  return {
+    schema_version: 2,
+    updated_at: new Date().toISOString(),
+    app_family: 'DofusCompanion',
+    storage_root: '%LOCALAPPDATA%\\DofusCompanionData',
+    required_json: [
+      { key: 'catalog', path: 'catalog/catalog.json', kind: 'catalog', required: true, syncable: true },
+      { key: 'failed-images', path: 'catalog/failed-images.json', kind: 'image-failures', required: false, syncable: true },
+      { key: 'characteristics', path: 'catalog/characteristics.json', kind: 'endpoint', required: true, syncable: true, endpoint: '/characteristics', page_limit: 150, normalizer: 'characteristics.v1' },
+      { key: 'characteristic-icons', path: 'catalog/characteristic-icons.json', kind: 'asset-manifest', required: true, syncable: true },
+      { key: 'characteristic-icon-aliases', path: 'catalog/characteristic-icon-aliases.json', kind: 'alias-map', required: true, syncable: true },
+      { key: 'sync-manifest', path: 'catalog/sync-manifest.json', kind: 'manifest', required: true, syncable: false },
+    ],
+    required_asset_groups: [
+      { key: 'item-images', path: 'images/items', required: true, syncable: true, source: 'item.image_url', extension: 'png' },
+      { key: 'characteristic-icons', path: 'icons/characteristics', required: true, syncable: true, source: `${CHARACTERISTIC_ICON_BASE_URL}/{file}`, extension: 'png' },
+    ],
+    endpoint_contracts: {
+      items: { endpoint: '/items', page_limit: PAGE_LIMIT, metadata_key: 'items', normalizer: 'items.v2' },
+      recipes: { endpoint: '/recipes', page_limit: PAGE_LIMIT, metadata_key: 'recipes', normalizer: 'recipes.v1' },
+      itemSets: { endpoint: '/item-sets', page_limit: PAGE_LIMIT, metadata_key: 'itemSets', normalizer: 'itemSets.v2' },
+      characteristics: { endpoint: '/characteristics', page_limit: 150, metadata_key: 'characteristics', normalizer: 'characteristics.v1' },
+    },
+    icon_aliases: CHARACTERISTIC_ICON_ALIASES,
+  }
+}
+
+async function saveSharedSyncManifest(): Promise<void> {
+  await saveSharedJson('sync-manifest', sharedSyncManifest())
 }
 
 function isRemoteImage(path: string | undefined): boolean {
@@ -147,17 +192,33 @@ function normalizeItem(raw: any, previous?: CatalogItem): CatalogItem | null {
     name,
     name_norm: normalizeText(name),
     compact: compactText(name),
+    level: Number.isFinite(Number(raw.level)) ? Number(raw.level) : null,
     raw_type: raw.type?.superType?.name?.fr || raw.type?.name?.fr || '',
     type_id: Number.isFinite(Number(raw.typeId ?? raw.type?.id)) ? Number(raw.typeId ?? raw.type?.id) : null,
     type_name: raw.type?.name?.fr || '',
     item_type_category_id: Number.isFinite(Number(raw.type?.categoryId)) ? Number(raw.type.categoryId) : null,
     item_type_in_encyclopedia: Boolean(raw.type?.inEncyclopedia),
+    item_set_id: Number.isFinite(Number(raw.itemSetId)) ? Number(raw.itemSetId) : null,
+    slot_positions: Array.isArray(raw.type?.superType?.positions) ? raw.type.superType.positions.map(Number).filter(Number.isFinite) : [],
+    effects: normalizeEffects(raw.effects),
+    possible_effects: Array.isArray(raw.possibleEffects) ? raw.possibleEffects : [],
     criterions: raw.criterions || '',
     quests_that_use: (raw.questsThatUse || []).map(Number),
     quests_that_reward: (raw.questsThatReward || []).map(Number),
     image_url: remoteImage,
     image_path: isRemoteImage(previous?.image_path) ? previous!.image_path : '',
   }
+}
+
+function normalizeEffects(rows: any[]): ItemEffect[] {
+  return (Array.isArray(rows) ? rows : []).map((effect) => ({
+    from: Number(effect.from || 0),
+    to: Number(effect.to || 0),
+    characteristic: Number(effect.characteristic ?? -1),
+    category: Number(effect.category ?? -1),
+    elementId: Number(effect.elementId ?? -1),
+    effectId: Number(effect.effectId ?? -1),
+  }))
 }
 
 function normalizeRecipe(raw: any): Recipe | null {
@@ -168,7 +229,37 @@ function normalizeRecipe(raw: any): Recipe | null {
 function normalizeSet(raw: any): ItemSet | null {
   if (raw?.id == null) return null
   const name = raw.name?.fr || raw.slug?.fr || `Panoplie ${raw.id}`
-  return { id: Number(raw.id), name, name_norm: normalizeText(name), compact: compactText(name), item_ids: (raw.items || []).map((item: any) => Number(item.id)) }
+  return {
+    id: Number(raw.id),
+    name,
+    name_norm: normalizeText(name),
+    compact: compactText(name),
+    item_ids: (raw.items || []).map((item: any) => Number(item.id)),
+    effects: (Array.isArray(raw.effects) ? raw.effects : []).map((group: any[]) => normalizeEffects(group)),
+  }
+}
+
+function characteristicIconFile(asset: string): string | null {
+  if (!asset) return null
+  return CHARACTERISTIC_ICON_ALIASES[asset] || `${asset}.png`
+}
+
+function normalizeCharacteristic(raw: any): Characteristic | null {
+  if (raw?.id == null) return null
+  const asset = String(raw.asset || '')
+  const iconFile = characteristicIconFile(asset)
+  return {
+    id: Number(raw.id),
+    keyword: String(raw.keyword || ''),
+    name: raw.name?.fr || raw.name?.en || `Caractéristique ${raw.id}`,
+    asset,
+    icon_file: iconFile,
+    icon_path: iconFile ? `icons/characteristics/${iconFile}` : null,
+    visible: Boolean(raw.visible),
+    order: Number(raw.order || 0),
+    category_id: Number.isFinite(Number(raw.categoryId)) ? Number(raw.categoryId) : null,
+    upgradable: Boolean(raw.upgradable),
+  }
 }
 
 function byId<T extends { id?: number; result_id?: number }>(rows: Array<T | null>, key: 'id' | 'result_id'): Record<string, T> {
@@ -192,6 +283,7 @@ function localRemoteMetadata(data: CatalogData, endpoint: SyncEndpoint): Endpoin
     items: 'item_total',
     recipes: 'recipe_total',
     itemSets: 'item_set_total',
+    characteristics: 'characteristic_total',
   }
   return {
     total: Number(remote?.[endpoint]?.total || data.metadata?.[legacyTotals[endpoint]] || 0),
@@ -207,33 +299,40 @@ function latestUpdatedAt(rows: any[]): string {
 }
 
 export async function checkCatalogStatus(data: CatalogData): Promise<CatalogStatus> {
-  const [items, recipes, itemSets] = await Promise.all([
+  const [items, recipes, itemSets, characteristics] = await Promise.all([
     endpointInfo('/items'),
     endpointInfo('/recipes'),
     endpointInfo('/item-sets'),
+    endpointInfo('/characteristics'),
   ])
   const labels = []
   const totals = {
     items: items.total,
     recipes: recipes.total,
     itemSets: itemSets.total,
+    characteristics: characteristics.total,
   }
   const latestUpdated = {
     items: items.latestUpdatedAt,
     recipes: recipes.latestUpdatedAt,
     itemSets: itemSets.latestUpdatedAt,
+    characteristics: characteristics.latestUpdatedAt,
   }
   const localItems = localRemoteMetadata(data, 'items')
   const localRecipes = localRemoteMetadata(data, 'recipes')
   const localItemSets = localRemoteMetadata(data, 'itemSets')
+  const localCharacteristics = localRemoteMetadata(data, 'characteristics')
   if (totals.items !== localItems.total || (latestUpdated.items && latestUpdated.items !== localItems.latestUpdatedAt)) labels.push('items')
   if (totals.recipes !== localRecipes.total || (latestUpdated.recipes && latestUpdated.recipes !== localRecipes.latestUpdatedAt)) labels.push('recettes')
   if (totals.itemSets !== localItemSets.total || (latestUpdated.itemSets && latestUpdated.itemSets !== localItemSets.latestUpdatedAt)) labels.push('panoplies')
+  if (totals.characteristics !== localCharacteristics.total || (latestUpdated.characteristics && latestUpdated.characteristics !== localCharacteristics.latestUpdatedAt)) labels.push('caractéristiques')
   const cachedIds = new Set(await loadCachedImageIds())
   const ignoredImageIds = recentFailedImageIds(await loadFailedCachedImages())
   const missingImageGroups = groupMissingImages(data, new Set([...cachedIds, ...ignoredImageIds])).length
   if (missingImageGroups > 0) labels.push('images')
-  return { needsSync: labels.length > 0, labels, totals, latestUpdatedAt: latestUpdated, missingImageGroups }
+  const missingCharacteristicIcons = await missingCharacteristicIconFiles().then((rows) => rows.length)
+  if (missingCharacteristicIcons > 0) labels.push('icônes de stats')
+  return { needsSync: labels.length > 0, labels, totals, latestUpdatedAt: latestUpdated, missingImageGroups, missingCharacteristicIcons }
 }
 
 export async function syncCatalogImages(
@@ -303,12 +402,84 @@ export async function syncCatalogImages(
   return new Map()
 }
 
+async function requiredCharacteristicIconFiles(): Promise<string[]> {
+  const raw = await fetchAll('/characteristics', 'characteristics')
+  const files = raw
+    .map((row) => characteristicIconFile(String(row.asset || '')))
+    .filter((file): file is string => Boolean(file))
+  return [...new Set(files)]
+}
+
+async function missingCharacteristicIconFiles(): Promise<string[]> {
+  const required = await requiredCharacteristicIconFiles()
+  const existing = new Set(await loadCharacteristicIconFiles())
+  return required.filter((file) => !existing.has(file))
+}
+
+async function syncCharacteristicSupport(rawCharacteristics: any[], progress?: SyncProgress): Promise<Characteristic[]> {
+  const characteristics = rawCharacteristics
+    .map(normalizeCharacteristic)
+    .filter((row): row is Characteristic => Boolean(row))
+  const aliases = Object.entries(CHARACTERISTIC_ICON_ALIASES).map(([asset, file]) => ({ asset, file }))
+  await saveSharedJson('characteristics', characteristics)
+  await saveSharedJson('characteristic-icon-aliases', aliases)
+  await saveSharedSyncManifest()
+  await syncCharacteristicIcons(characteristics, progress)
+  return characteristics
+}
+
+export async function syncCharacteristicSupportData(progress?: SyncProgress): Promise<Characteristic[]> {
+  const rawCharacteristics = await fetchAll('/characteristics', 'characteristics', progress)
+  return syncCharacteristicSupport(rawCharacteristics, progress)
+}
+
+export async function syncCharacteristicIcons(characteristics: Characteristic[], progress?: SyncProgress): Promise<void> {
+  const existing = new Set(await loadCharacteristicIconFiles())
+  const required = [...new Set(characteristics.map((row) => row.icon_file).filter((file): file is string => Boolean(file)))]
+  const missing = required.filter((file) => !existing.has(file))
+  let cursor = 0
+  let completed = 0
+  let bytesDone = 0
+  let successful = 0
+  let bytesTotal = missing.length * ESTIMATED_CHARACTERISTIC_ICON_BYTES
+  const manifest: Array<{ file: string; path: string; source: string; bytes: number }> = []
+  progress?.({ kind: 'statIcons', done: 0, total: missing.length, bytesDone, bytesTotal })
+  await Promise.all(Array.from({ length: Math.min(CONCURRENCY, missing.length) }, async () => {
+    while (cursor < missing.length) {
+      const file = missing[cursor++]
+      const source = `${CHARACTERISTIC_ICON_BASE_URL}/${file}`
+      const response = await fetch(source, { cache: 'no-store', signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) })
+      if (!response.ok) throw new Error(`Icône caractéristique ${response.status}`)
+      const blob = await response.blob()
+      await saveCharacteristicIcon(file, blob)
+      bytesDone += blob.size
+      successful += 1
+      if (successful > 0) bytesTotal = Math.max(bytesDone, (bytesDone / successful) * missing.length)
+      manifest.push({ file, path: `icons/characteristics/${file}`, source, bytes: blob.size })
+      completed += 1
+      progress?.({ kind: 'statIcons', done: completed, total: missing.length, bytesDone, bytesTotal })
+    }
+  }))
+  const existingManifest = required.map((file) => {
+    const downloaded = manifest.find((row) => row.file === file)
+    return downloaded || {
+      file,
+      path: `icons/characteristics/${file}`,
+      source: `${CHARACTERISTIC_ICON_BASE_URL}/${file}`,
+      bytes: 0,
+    }
+  })
+  await saveSharedJson('characteristic-icons', existingManifest)
+}
+
 export async function syncCatalogData(previous: CatalogData, progress?: SyncProgress): Promise<CatalogData> {
-  const [rawItems, rawRecipes, rawSets] = await Promise.all([
+  const [rawItems, rawRecipes, rawSets, rawCharacteristics] = await Promise.all([
     fetchAll('/items', 'items', progress),
     fetchAll('/recipes', 'recipes', progress),
     fetchAll('/item-sets', 'itemSets', progress),
+    fetchAll('/characteristics', 'characteristics', progress),
   ])
+  const characteristics = await syncCharacteristicSupport(rawCharacteristics, progress)
   const data: CatalogData = {
     items: byId(rawItems.map((raw) => normalizeItem(raw, previous.items[String(raw.id)])), 'id'),
     recipes: byId(rawRecipes.map(normalizeRecipe), 'result_id'),
@@ -318,10 +489,12 @@ export async function syncCatalogData(previous: CatalogData, progress?: SyncProg
       item_total: rawItems.length,
       recipe_total: rawRecipes.length,
       item_set_total: rawSets.length,
+      characteristic_total: characteristics.length,
       remote: {
         items: { total: rawItems.length, latestUpdatedAt: latestUpdatedAt(rawItems) },
         recipes: { total: rawRecipes.length, latestUpdatedAt: latestUpdatedAt(rawRecipes) },
         itemSets: { total: rawSets.length, latestUpdatedAt: latestUpdatedAt(rawSets) },
+        characteristics: { total: rawCharacteristics.length, latestUpdatedAt: latestUpdatedAt(rawCharacteristics) },
       },
       shared_sync_state: 'complete',
     },

@@ -7,11 +7,16 @@ export interface CatalogItem {
   name: string
   name_norm?: string
   compact?: string
+  level?: number | null
   raw_type: string
   type_id: number | null
   type_name: string
   item_type_category_id: number | null
   item_type_in_encyclopedia?: boolean
+  item_set_id?: number | null
+  slot_positions?: number[]
+  effects?: ItemEffect[]
+  possible_effects?: unknown[]
   criterions?: string
   quests_that_use?: number[]
   quests_that_reward?: number[]
@@ -31,6 +36,29 @@ export interface ItemSet {
   name_norm: string
   compact: string
   item_ids: number[]
+  effects?: ItemEffect[][]
+}
+
+export interface ItemEffect {
+  from: number
+  to: number
+  characteristic: number
+  category: number
+  elementId: number
+  effectId: number
+}
+
+export interface Characteristic {
+  id: number
+  keyword: string
+  name: string
+  asset: string
+  icon_file: string | null
+  icon_path: string | null
+  visible: boolean
+  order: number
+  category_id: number | null
+  upgradable: boolean
 }
 
 export interface RecipeExclusions {

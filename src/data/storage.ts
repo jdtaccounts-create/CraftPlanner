@@ -11,6 +11,11 @@ type SharedImageRow = {
   bytes: number[]
 }
 
+type SharedAssetRow = {
+  file: string
+  bytes: number[]
+}
+
 export interface SharedSyncLock {
   app: string
   pid: number
@@ -106,6 +111,22 @@ export async function saveStoredCatalog(data: CatalogData): Promise<void> {
   await save('catalog', data)
 }
 
+export async function saveSharedJson(key: string, value: unknown): Promise<void> {
+  if (isTauriRuntime()) {
+    await invokeShared('write_shared_json', { key, value: JSON.stringify(value) })
+    return
+  }
+  await save(key, value)
+}
+
+export async function loadSharedJson<T>(key: string): Promise<T | null> {
+  if (isTauriRuntime()) {
+    const text = await invokeShared<string | null>('read_shared_json', { key })
+    return text ? JSON.parse(text) as T : null
+  }
+  return load<T>(key)
+}
+
 export async function loadStoredCatalog(): Promise<CatalogData | null> {
   if (isTauriRuntime()) {
     const text = await invokeShared<string | null>('read_shared_json', { key: 'catalog' })
@@ -188,6 +209,27 @@ export async function saveCachedImage(itemId: number, blob: Blob): Promise<void>
     transaction.oncomplete = () => { database.close(); resolve() }
     transaction.onerror = () => reject(transaction.error)
   })
+}
+
+export async function loadCharacteristicIconFiles(): Promise<string[]> {
+  if (isTauriRuntime()) return invokeShared<string[]>('list_shared_characteristic_icons')
+  return []
+}
+
+export async function loadCharacteristicIcons(files: Iterable<string>): Promise<Array<{ file: string; blob: Blob }>> {
+  const uniqueFiles = [...new Set([...files].filter(Boolean))]
+  if (!uniqueFiles.length) return []
+  if (isTauriRuntime()) {
+    const rows = await invokeShared<SharedAssetRow[]>('read_shared_characteristic_icons', { files: uniqueFiles })
+    return rows.map((row) => ({ file: row.file, blob: bytesToBlob(row.bytes) }))
+  }
+  return []
+}
+
+export async function saveCharacteristicIcon(file: string, blob: Blob): Promise<void> {
+  if (isTauriRuntime()) {
+    await invokeShared('write_shared_characteristic_icon', { file, bytes: await blobToBytes(blob) })
+  }
 }
 
 export async function clearCachedImages(): Promise<void> {
