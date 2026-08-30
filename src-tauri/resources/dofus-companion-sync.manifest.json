@@ -1,0 +1,12 @@
+{
+  "manifestVersion": 1,
+  "engineVersion": "0.2.0",
+  "protocolVersion": 1,
+  "catalogSchemaVersion": 2,
+  "syncManifestSchemaVersion": 5,
+  "assetName": "dofus-companion-sync.exe",
+  "target": "x86_64-pc-windows-msvc",
+  "size": 4734464,
+  "sha256": "62a0b03c14b65cdeb1bf6d52481d36d950778531a75eaf832bc18fed53a2ba13",
+  "commit": "ac8ebb14a4a1911b1db4767202b59c314f16701a"
+}

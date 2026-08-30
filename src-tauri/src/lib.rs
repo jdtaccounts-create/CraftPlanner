@@ -1,4 +1,6 @@
-use tauri::{Emitter, Manager};
+mod dofus_companion_sync;
+
+use tauri::Emitter;
 
 #[derive(serde::Serialize)]
 struct HttpTextResponse {
@@ -18,24 +20,6 @@ struct CachedAsset {
     bytes: Vec<u8>,
 }
 
-#[derive(serde::Serialize, serde::Deserialize)]
-struct SyncEngineVersion {
-    version: String,
-    source: String,
-}
-
-#[derive(serde::Deserialize)]
-struct GitHubRelease {
-    tag_name: String,
-    assets: Vec<GitHubReleaseAsset>,
-}
-
-#[derive(serde::Deserialize)]
-struct GitHubReleaseAsset {
-    name: String,
-    browser_download_url: String,
-}
-
 #[derive(serde::Serialize, serde::Deserialize, Clone)]
 struct SharedSyncLock {
     app: String,
@@ -52,10 +36,6 @@ struct SharedSyncLockStatus {
 }
 
 const SHARED_LOCK_STALE_MS: u64 = 2 * 60 * 1000;
-const BUNDLED_SYNC_ENGINE_VERSION: &str = "0.1.0";
-const SYNC_ENGINE_RELEASE_API: &str =
-    "https://api.github.com/repos/jdtaccounts-create/DofusCompanionSync/releases/latest";
-const SYNC_ENGINE_ASSET_NAME: &str = "dofus-companion-sync.exe";
 
 fn now_millis() -> Result<u64, String> {
     std::time::SystemTime::now()
@@ -93,218 +73,7 @@ fn is_process_running(pid: u32) -> bool {
 }
 
 fn shared_data_dir() -> Result<std::path::PathBuf, String> {
-    let local_app_data = std::env::var_os("LOCALAPPDATA")
-        .map(std::path::PathBuf::from)
-        .or_else(|| {
-            std::env::var_os("USERPROFILE")
-                .map(std::path::PathBuf::from)
-                .map(|path| path.join("AppData").join("Local"))
-        })
-        .ok_or_else(|| "Dossier AppData local introuvable".to_string())?;
-    Ok(local_app_data.join("DofusCompanionData"))
-}
-
-fn files_are_identical(left: &std::path::Path, right: &std::path::Path) -> Result<bool, String> {
-    let left_meta = std::fs::metadata(left).map_err(|error| error.to_string())?;
-    let right_meta = std::fs::metadata(right).map_err(|error| error.to_string())?;
-    if left_meta.len() != right_meta.len() {
-        return Ok(false);
-    }
-    let left_bytes = std::fs::read(left).map_err(|error| error.to_string())?;
-    let right_bytes = std::fs::read(right).map_err(|error| error.to_string())?;
-    Ok(left_bytes == right_bytes)
-}
-
-fn sync_engine_version_path() -> Result<std::path::PathBuf, String> {
-    Ok(shared_data_dir()?.join("sync").join("engine-version.json"))
-}
-
-fn read_sync_engine_version() -> Option<SyncEngineVersion> {
-    let path = sync_engine_version_path().ok()?;
-    let text = std::fs::read_to_string(path).ok()?;
-    serde_json::from_str(&text).ok()
-}
-
-fn write_sync_engine_version(version: &str, source: &str) -> Result<(), String> {
-    let payload = SyncEngineVersion {
-        version: version.to_string(),
-        source: source.to_string(),
-    };
-    let bytes = serde_json::to_vec_pretty(&payload).map_err(|error| error.to_string())?;
-    write_file_safely(&sync_engine_version_path()?, &bytes)
-}
-
-fn normalize_version(version: &str) -> &str {
-    version.trim().trim_start_matches('v')
-}
-
-fn version_parts(version: &str) -> Vec<u64> {
-    normalize_version(version)
-        .split('.')
-        .map(|part| part.parse::<u64>().unwrap_or(0))
-        .collect()
-}
-
-fn is_version_newer(candidate: &str, current: &str) -> bool {
-    let mut left = version_parts(candidate);
-    let mut right = version_parts(current);
-    let len = left.len().max(right.len());
-    left.resize(len, 0);
-    right.resize(len, 0);
-    left > right
-}
-
-fn bundled_sync_engine_path(app: &tauri::AppHandle) -> Option<std::path::PathBuf> {
-    ["dofus-companion-sync.exe", "resources/dofus-companion-sync.exe"]
-        .iter()
-        .filter_map(|relative| {
-            app.path()
-                .resolve(relative, tauri::path::BaseDirectory::Resource)
-                .ok()
-        })
-        .find(|path| path.exists())
-}
-
-fn install_bundled_sync_engine(
-    app: &tauri::AppHandle,
-    installed: &std::path::Path,
-) -> Result<(), String> {
-    let Some(bundled) = bundled_sync_engine_path(app) else {
-        return Ok(());
-    };
-
-    if installed.exists() {
-        if let Some(current) = read_sync_engine_version() {
-            if is_version_newer(&current.version, BUNDLED_SYNC_ENGINE_VERSION) {
-                return Ok(());
-            }
-        }
-        if files_are_identical(installed, &bundled)? {
-            write_sync_engine_version(BUNDLED_SYNC_ENGINE_VERSION, "bundled")?;
-            return Ok(());
-        }
-    }
-
-    if let Some(parent) = installed.parent() {
-        std::fs::create_dir_all(parent).map_err(|error| error.to_string())?;
-    }
-
-    let temp = installed.with_extension(format!("exe.{}.tmp", std::process::id()));
-    if temp.exists() {
-        let _ = std::fs::remove_file(&temp);
-    }
-    std::fs::copy(&bundled, &temp).map_err(|error| error.to_string())?;
-
-    if installed.exists() {
-        if let Err(error) = std::fs::remove_file(installed) {
-            let _ = std::fs::remove_file(&temp);
-            if installed.exists() {
-                return Ok(());
-            }
-            return Err(error.to_string());
-        }
-    }
-
-    std::fs::rename(&temp, installed).map_err(|error| {
-        let _ = std::fs::remove_file(&temp);
-        error.to_string()
-    })?;
-    write_sync_engine_version(BUNDLED_SYNC_ENGINE_VERSION, "bundled")?;
-
-    Ok(())
-}
-
-async fn update_sync_engine_from_github(installed: &std::path::Path) -> Result<(), String> {
-    let client = reqwest::Client::builder()
-        .user_agent("DofusCompanionApps/1.0")
-        .build()
-        .map_err(|error| error.to_string())?;
-    let release_text = client
-        .get(SYNC_ENGINE_RELEASE_API)
-        .send()
-        .await
-        .map_err(|error| error.to_string())?
-        .error_for_status()
-        .map_err(|error| error.to_string())?
-        .text()
-        .await
-        .map_err(|error| error.to_string())?;
-    let release: GitHubRelease =
-        serde_json::from_str(&release_text).map_err(|error| error.to_string())?;
-
-    let latest_version = normalize_version(&release.tag_name).to_string();
-    let current_version = read_sync_engine_version()
-        .map(|value| value.version)
-        .unwrap_or_else(|| "0.0.0".to_string());
-    if installed.exists() && !is_version_newer(&latest_version, &current_version) {
-        return Ok(());
-    }
-
-    let Some(asset) = release
-        .assets
-        .into_iter()
-        .find(|asset| asset.name == SYNC_ENGINE_ASSET_NAME)
-    else {
-        return Ok(());
-    };
-
-    let bytes = client
-        .get(asset.browser_download_url)
-        .send()
-        .await
-        .map_err(|error| error.to_string())?
-        .error_for_status()
-        .map_err(|error| error.to_string())?
-        .bytes()
-        .await
-        .map_err(|error| error.to_string())?;
-
-    if let Some(parent) = installed.parent() {
-        std::fs::create_dir_all(parent).map_err(|error| error.to_string())?;
-    }
-    let temp = installed.with_extension(format!("exe.github.{}.tmp", std::process::id()));
-    if temp.exists() {
-        let _ = std::fs::remove_file(&temp);
-    }
-    std::fs::write(&temp, &bytes).map_err(|error| error.to_string())?;
-    if installed.exists() {
-        std::fs::remove_file(installed).map_err(|error| error.to_string())?;
-    }
-    std::fs::rename(&temp, installed).map_err(|error| {
-        let _ = std::fs::remove_file(&temp);
-        error.to_string()
-    })?;
-    write_sync_engine_version(&latest_version, "github")?;
-    Ok(())
-}
-
-async fn shared_sync_engine_path(app: &tauri::AppHandle) -> Result<std::path::PathBuf, String> {
-    let installed = shared_data_dir()?
-        .join("sync")
-        .join("dofus-companion-sync.exe");
-    install_bundled_sync_engine(app, &installed)?;
-    if let Err(error) = update_sync_engine_from_github(&installed).await {
-        let _ = app.emit(
-            "shared-sync-event",
-            serde_json::json!({
-                "kind": "message",
-                "message": format!("Moteur commun GitHub indisponible, version locale conservee ({error})")
-            })
-            .to_string(),
-        );
-    }
-    if installed.exists() {
-        return Ok(installed);
-    }
-
-    let development = std::path::PathBuf::from(
-        "D:\\GitHub\\DofusCompanionSync\\target\\release\\dofus-companion-sync.exe",
-    );
-    if development.exists() {
-        return Ok(development);
-    }
-
-    Err("Moteur commun DofusCompanionSync introuvable".to_string())
+    dofus_companion_sync::shared_data_dir()
 }
 
 fn shared_json_path(key: &str) -> Result<std::path::PathBuf, String> {
@@ -622,45 +391,11 @@ async fn run_shared_sync_engine(
     app_name: String,
     force: Option<bool>,
 ) -> Result<(), String> {
-    let engine = shared_sync_engine_path(&app).await?;
+    let engine = dofus_companion_sync::ensure_engine(&app).await?;
     tauri::async_runtime::spawn_blocking(move || -> Result<(), String> {
-        let mut command = std::process::Command::new(engine);
-        command.args(["sync", "--app", &app_name]);
-        if force.unwrap_or(false) {
-            command.arg("--force");
-        }
-        command
-            .stdout(std::process::Stdio::piped())
-            .stderr(std::process::Stdio::piped());
-        #[cfg(windows)]
-        {
-            use std::os::windows::process::CommandExt;
-            command.creation_flags(0x08000000);
-        }
-        let mut child = command.spawn().map_err(|error| error.to_string())?;
-        let stdout = child
-            .stdout
-            .take()
-            .ok_or_else(|| "Sortie moteur indisponible".to_string())?;
-        let reader = std::io::BufReader::new(stdout);
-        for line in std::io::BufRead::lines(reader) {
-            let line = line.map_err(|error| error.to_string())?;
+        dofus_companion_sync::run_engine(engine, app_name, force.unwrap_or(false), move |line| {
             let _ = app.emit("shared-sync-event", line);
-        }
-        let status = child.wait().map_err(|error| error.to_string())?;
-        if status.success() {
-            Ok(())
-        } else {
-            let mut stderr = String::new();
-            if let Some(mut pipe) = child.stderr.take() {
-                let _ = std::io::Read::read_to_string(&mut pipe, &mut stderr);
-            }
-            Err(if stderr.trim().is_empty() {
-                format!("DofusCompanionSync a quitté avec le code {status}")
-            } else {
-                stderr.trim().to_string()
-            })
-        }
+        })
     })
     .await
     .map_err(|error| error.to_string())?

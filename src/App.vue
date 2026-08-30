@@ -47,7 +47,7 @@ const FORCE_FULL_SYNC_KEY = 'craftplanner-force-full-sync'
 const FORCE_FULL_SYNC_PARAM = 'forceFullSync'
 const EXTERNAL_SYNC_IDLE_CONFIRM_MS = 3500
 
-type SyncTaskKey = SyncEndpoint | 'images' | 'statIcons'
+type SyncTaskKey = SyncEndpoint | 'effects' | 'images' | 'statIcons'
 
 interface SyncTaskState {
   key: SyncTaskKey
@@ -58,12 +58,13 @@ interface SyncTaskState {
   bytesTotal?: number
 }
 
-const syncTaskOrder: SyncTaskKey[] = ['items', 'recipes', 'itemSets', 'characteristics', 'images', 'statIcons']
+const syncTaskOrder: SyncTaskKey[] = ['items', 'recipes', 'itemSets', 'characteristics', 'effects', 'images', 'statIcons']
 const syncTaskLabels: Record<SyncTaskKey, string> = {
   items: 'Items',
   recipes: 'Recettes',
   itemSets: 'Panoplies',
   characteristics: 'Stats',
+  effects: 'Effets spéciaux',
   images: 'Images',
   statIcons: 'Icônes stats',
 }
@@ -496,6 +497,7 @@ function seedSharedSyncStatus(event: any): void {
   if (remote.recipes?.total) updateSyncTask('recipes', { done: 0, total: Number(remote.recipes.total), bytesDone: 0 })
   if (remote.itemSets?.total) updateSyncTask('itemSets', { done: 0, total: Number(remote.itemSets.total), bytesDone: 0 })
   if (remote.characteristics?.total) updateSyncTask('characteristics', { done: 0, total: Number(remote.characteristics.total), bytesDone: 0 })
+  if (remote.effects?.total) updateSyncTask('effects', { done: 0, total: Number(remote.effects.total), bytesDone: 0 })
   if (event.missingImages) {
     updateSyncTask('images', {
       done: 0,
